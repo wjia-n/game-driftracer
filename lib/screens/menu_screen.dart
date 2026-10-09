@@ -309,7 +309,10 @@ class _MenuScreenState extends State<MenuScreen> {
                       onTier: _playTier,
                       goPro: _goPro),
                   const SizedBox(height: 14),
-                  _QuickCard(theme: t),
+                  _QuickCard(
+                      theme: t,
+                      humans: _humans,
+                      onHumans: (h) => setState(() => _humans = h)),
                   const SizedBox(height: 14),
                   _NamesCard(theme: t),
                   const SizedBox(height: 14),
@@ -724,7 +727,10 @@ class _CareerCard extends StatelessWidget {
 /// Quick-race setup: humans, bots, difficulty, laps.
 class _QuickCard extends StatelessWidget {
   final RaceThemeDef theme;
-  const _QuickCard({required this.theme});
+  final int humans;
+  final ValueChanged<int> onHumans;
+  const _QuickCard(
+      {required this.theme, required this.humans, required this.onHumans});
 
   @override
   Widget build(BuildContext context) {
@@ -747,15 +753,15 @@ class _QuickCard extends StatelessWidget {
                 _Chip(
                   theme: theme,
                   label: '$h',
-                  selected: screen._humans == h,
+                  selected: humans == h,
                   onTap: () {
                     audio.click();
-                    screen.setState(() => screen._humans = h);
+                    onHumans(h);
                   },
                 ),
             ],
           ),
-          if (screen._humans > 1)
+          if (humans > 1)
             Padding(
               padding: const EdgeInsets.only(top: 6),
               child: Text(

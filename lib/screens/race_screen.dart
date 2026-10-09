@@ -547,12 +547,10 @@ class _IconCircle extends StatefulWidget {
   final RaceThemeDef theme;
   final IconData icon;
   final VoidCallback onTap;
-  final double size;
   const _IconCircle(
       {required this.theme,
       required this.icon,
-      required this.onTap,
-      this.size = 44});
+      required this.onTap});
 
   @override
   State<_IconCircle> createState() => _IconCircleState();
@@ -573,8 +571,8 @@ class _IconCircleState extends State<_IconCircle> {
       onTapCancel: () => setState(() => _pressed = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 90),
-        width: widget.size,
-        height: widget.size,
+        width: 44,
+        height: 44,
         transform: Matrix4.translationValues(0, _pressed ? 2 : 0, 0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -591,7 +589,7 @@ class _IconCircleState extends State<_IconCircle> {
             ),
           ],
         ),
-        child: Icon(widget.icon, color: t.woodDeep, size: widget.size * 0.52),
+        child: Icon(widget.icon, color: t.woodDeep, size: 44 * 0.52),
       ),
     );
   }
