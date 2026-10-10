@@ -85,7 +85,7 @@ class RacerSettings extends ChangeNotifier {
   int gamesPlayed = 0;
   int bestLapMs = 0;
   int bestEndless = 0;
-  bool isPro = false;
+  bool isPro = true; // everything unlocked — no Pro version
   bool reviewAsked = false;
 
   Map<String, int> customColors = Map.of(CustomKeys.defaults);
@@ -147,7 +147,7 @@ class RacerSettings extends ChangeNotifier {
     gamesPlayed = p.getInt(_kGames) ?? 0;
     bestLapMs = p.getInt(_kBestLap) ?? 0;
     bestEndless = p.getInt(_kBestEndless) ?? 0;
-    isPro = p.getBool(_kIsPro) ?? false;
+    isPro = true; // everything unlocked
     reviewAsked = p.getBool(_kReviewAsked) ?? false;
     for (final k in CustomKeys.defaults.keys) {
       customColors[k] =
