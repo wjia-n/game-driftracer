@@ -15,6 +15,9 @@ import 'package:audioplayers/audioplayers.dart';
 ///   left off instead of restarting or dying.
 /// - Every public method catches player errors; audio can never crash the app.
 class DriftAudio {
+  /// Per-game pitch character (driftracer): 1.34x. Makes SFX unique.
+  static const double _pitchMul = 1.340;
+
   static const int _rate = 22050;
   final AudioPlayer _sfx = AudioPlayer();
   final AudioPlayer _music = AudioPlayer();
@@ -108,6 +111,8 @@ class DriftAudio {
 
   List<double> _tone(double freq, double secs,
       {double freqEnd = 0, double attack = 0.02, double harmonics = 0.25}) {
+    freq *= _pitchMul;
+    freqEnd *= _pitchMul;
     final n = (_rate * secs).round();
     final out = List<double>.filled(n, 0);
     for (int i = 0; i < n; i++) {
@@ -165,12 +170,31 @@ class DriftAudio {
       _cache.putIfAbsent(key, () => _wav(build()));
 
   Uint8List _menuBytes() => _clip('music_menu', () {
-        // Greasy garage warmup: low Am – F – C – G pads with a lazy bass.
+        // B arpeggiated 0 – 4 – 5 – 3, 16s loop. Unique to driftracer.
+        final notes = [246.94, 311.12, 369.99, 311.12, 369.99, 466.16, 554.36, 466.16, 415.30, 493.88, 622.25, 493.88, 329.63, 415.30, 493.88, 415.30];
+        final out = <double>[];
+        final noteLen = 16.0 / notes.length;
+        for (final n in notes) {
+          out.addAll(_tone(n, noteLen * 0.9, harmonics: 0.3));
+          final gap = List<double>.filled((_rate * noteLen * 0.1).round(), 0);
+          out.addAll(gap);
+        }
+        // Soft pad underneath
+        final pad = _padChord([246.94, 311.12, 369.99], 16.0);
+        for (int i = 0; i < out.length && i < pad.length; i++) {
+          out[i] += pad[i] * 0.3;
+        }
+        return out;
+      });
+
+
+  Uint8List _gameBytes() => _clip('music_game', () {
+        // B 0 – 4 – 5 – 3 warm pad, 16s loop. Unique to driftracer.
         final seq = [
-          [110.0, 220.0, 261.63], // Am
-          [87.31, 174.61, 220.0], // F
-          [130.81, 261.63, 329.63], // C
-          [98.0, 196.0, 246.94], // G
+          [246.94, 311.12, 369.99],
+          [369.99, 466.16, 554.36],
+          [415.30, 493.88, 622.25],
+          [329.63, 415.30, 493.88]
         ];
         final out = <double>[];
         for (final chord in seq) {
@@ -179,29 +203,6 @@ class DriftAudio {
         return out;
       });
 
-  Uint8List _gameBytes() => _clip('music_game', () {
-        // Driving pentatonic groove over an engine-like bass pulse, 12s.
-        final n = (_rate * 12).round();
-        final bass = List<double>.filled(n, 0);
-        const pulse = [82.41, 82.41, 98.0, 82.41, 110.0, 98.0, 82.41, 73.42];
-        for (int k = 0; k < 16; k++) {
-          final start = (n * k / 16).round();
-          final f = pulse[k % pulse.length];
-          final tone = _tone(f, 0.32, harmonics: 0.4, attack: 0.01);
-          for (int i = 0; i < tone.length && start + i < n; i++) {
-            bass[start + i] += tone[i] * 0.5;
-          }
-        }
-        final plucks = [392.0, 440.0, 523.25, 587.33, 659.25, 587.33, 523.25, 440.0];
-        for (int k = 0; k < plucks.length; k++) {
-          final start = (n * k / plucks.length).round();
-          final tone = _tone(plucks[k], 0.4, harmonics: 0.3);
-          for (int i = 0; i < tone.length && start + i < n; i++) {
-            bass[start + i] += tone[i] * 0.22;
-          }
-        }
-        return bass;
-      });
 
   /// Looping engine hum (seamless-ish loop, engine-y growl).
   Uint8List _engineLoopBytes() => _clip('loop_engine', () {

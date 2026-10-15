@@ -100,7 +100,7 @@ class RaceThemes {
     ),
     RaceThemeDef(
       id: 'alpine',
-      name: 'Alpine Pine',
+      name: 'Summit Pine',
       woodDark: Color(0xFF1E2B26),
       woodMid: Color(0xFF35473E),
       woodDeep: Color(0xFF101814),
@@ -247,7 +247,7 @@ class RaceThemes {
     ),
     RaceThemeDef(
       id: 'safari',
-      name: 'Safari Rally',
+      name: 'Trail Rally',
       woodDark: Color(0xFF2F2A1A),
       woodMid: Color(0xFF4D452B),
       woodDeep: Color(0xFF1A1509),
