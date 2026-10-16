@@ -7,6 +7,7 @@ import '../theme/pit_art.dart';
 import '../theme/race_themes.dart';
 import 'custom_theme_screen.dart';
 import 'pro_screen.dart';
+import '../transfer/transfer_ui.dart';
 
 /// Settings — sound, PRO, appearance (theme / car / track pickers +
 /// custom theme creator), support, about.
@@ -105,6 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+              TransferSaveTile(gameSlug: 'driftracer'),
                 _SectionTitle('Sound', t),
                 SettingRow(
                   theme: t,
