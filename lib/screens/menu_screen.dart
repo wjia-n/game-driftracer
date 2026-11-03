@@ -288,7 +288,7 @@ class _MenuScreenState extends State<MenuScreen> {
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        s.isPro ? '✦  PRO ACTIVE' : '✦  Get PRO',
+                        defaultTargetPlatform == TargetPlatform.iOS ? '⭐ Gold Star' : (s.isPro ? '✦  PRO ACTIVE' : '✦  Get PRO'),
                         style: Pit.label(17,
                             theme: t, color: t.woodDeep),
                       ),
