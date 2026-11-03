@@ -1048,14 +1048,6 @@ class _ThemeCard extends StatelessWidget {
               ),
             ],
           ),
-          if (!isPro)
-            Padding(
-              padding: const EdgeInsets.only(top: 8),
-              child: Text(
-                '🔒 ${RaceThemes.all.length - RaceThemes.freeThemeIds.length} more themes in PRO',
-                style: Pit.label(12, theme: theme),
-              ),
-            ),
           const SizedBox(height: 14),
           Text('Car style:', style: Pit.body(14, theme: theme)),
           const SizedBox(height: 4),

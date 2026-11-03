@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../services/audio_service.dart';
 import '../services/iap_service.dart';
@@ -159,10 +160,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   },
                 ),
                 const SizedBox(height: 10),
-                _SectionTitle('Drift Racer PRO', t),
+                _SectionTitle(defaultTargetPlatform == TargetPlatform.iOS ? 'Gold Star' : 'Drift Racer PRO', t),
                 SettingRow(
                   theme: t,
-                  label: s.isPro ? 'PRO active ✦' : 'Unlock PRO',
+                  label: defaultTargetPlatform == TargetPlatform.iOS ? 'Gold Star' : (s.isPro ? 'PRO active ✦' : 'Unlock PRO'),
                   control: GestureDetector(
                     onTap: () {
                       audio.click();
@@ -180,7 +181,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             color: t.accentLight, width: 2),
                       ),
                       child: Text(
-                        s.isPro ? '✦ PRO' : 'View',
+                        defaultTargetPlatform == TargetPlatform.iOS ? 'View' : (s.isPro ? '✦ PRO' : 'View'),
                         style: Pit.label(13,
                             theme: t,
                             color: s.isPro ? t.woodDeep : t.ivory),
@@ -303,9 +304,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          s.isPro
+                          defaultTargetPlatform == TargetPlatform.iOS
                               ? '🎨 Open theme creator'
-                              : '🔒 Theme creator (PRO)',
+                              : (s.isPro
+                                  ? '🎨 Open theme creator'
+                                  : '🔒 Theme creator (PRO)'),
                           style: Pit.label(14, theme: t),
                         ),
                       ],
@@ -362,6 +365,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                   ],
                 ),
+                if (defaultTargetPlatform != TargetPlatform.iOS) ...[
                 const SizedBox(height: 10),
                 _SectionTitle('Support', t),
                 Container(
@@ -426,6 +430,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ],
                   ),
                 ),
+                ],
                 const SizedBox(height: 10),
                 _SectionTitle('About', t),
                 Text(
